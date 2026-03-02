@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Voting System</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #2c5364, #203a43, #0f2027);
+        color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        background: #1e1e1e;
+        padding: 25px;
+        border-radius: 10px;
+        width: 350px;
+        box-shadow: 0 0 15px rgba(0,0,0,0.6);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    input, select, button {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border-radius: 5px;
+        border: none;
+    }
+
+    button {
+        background: #00c6ff;
+        color: black;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #00a8d6;
+    }
+
+    .results {
+        margin-top: 15px;
+        background: #2a2a2a;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 14px;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Voting System</h2>
+
+    <!-- Voting Inputs -->
+    <input type="number" id="voterId" placeholder="Enter Voter ID" style="width: 94%;">
+    <input type="text" id="voterName" placeholder="Enter Voter Name" style="width: 94%;">
+
+    <select id="vote">
+        <option value="">Select Candidate</option>
+        <option value="A">Candidate A</option>
+        <option value="B">Candidate B</option>
+        <option value="C">Candidate C</option>
+    </select>
+
+    <!-- Buttons -->
+    <button onclick="castVote()">Cast Vote</button>
+    <button onclick="showResults()">View Results</button>
+    <button onclick="hideResults()">Hide Results</button>
+    <button onclick="exitSystem()">Exit</button>
+
+    <!-- Results Section -->
+    <div class="results hidden" id="results">
+        <p>Candidate A: <span id="aVotes">0</span> votes</p>
+        <p>Candidate B: <span id="bVotes">0</span> votes</p>
+        <p>Candidate C: <span id="cVotes">0</span> votes</p>
+        <p>Total Votes Cast: <span id="totalVotes">0</span> / 10</p>
+    </div>
+</div>
+
+<script>
+    let votesA = 0;
+    let votesB = 0;
+    let votesC = 0;
+    let totalVotes = 0;
+    const maxVotes = 10;
+    let votingOpen = true;
+    let votedIDs = [];
+
+    function castVote() {
+        if (!votingOpen) {
+            alert("Voting system is closed!");
+            return;
+        }
+
+        let id = document.getElementById("voterId").value;
+        let name = document.getElementById("voterName").value;
+        let vote = document.getElementById("vote").value;
+
+        if (id === "" || name === "" || vote === "") {
+            alert("Please fill all fields!");
+            return;
+        }
+
+        if (votedIDs.includes(id)) {
+            alert("Duplicate vote not allowed!");
+            return;
+        }
+
+        if (totalVotes >= maxVotes) {
+            alert("Maximum votes reached!");
+            return;
+        }
+
+        if (vote === "A") votesA++;
+        else if (vote === "B") votesB++;
+        else if (vote === "C") votesC++;
+
+        votedIDs.push(id);
+        totalVotes++;
+
+        alert("Vote recorded successfully!");
+
+        document.getElementById("voterId").value = "";
+        document.getElementById("voterName").value = "";
+        document.getElementById("vote").value = "";
+    }
+
+    function showResults() {
+        document.getElementById("results").classList.remove("hidden");
+        document.getElementById("aVotes").innerText = votesA;
+        document.getElementById("bVotes").innerText = votesB;
+        document.getElementById("cVotes").innerText = votesC;
+        document.getElementById("totalVotes").innerText = totalVotes;
+    }
+
+    function hideResults() {
+        document.getElementById("results").classList.add("hidden");
+    }
+
+    function exitSystem() {
+        votingOpen = false;
+        alert("Exiting Voting System...");
+    }
+</script>
+
+</body>
+</html>
